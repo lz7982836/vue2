@@ -17,6 +17,12 @@
             : item.playCount
         }}
       </div>
+      <Icon
+        icon="basil:play-solid"
+        color="white"
+        class="absolute right-[2vw] bottom-[12vw]"
+        width="5vw"
+      />
     </li>
   </ul>
 </template>
