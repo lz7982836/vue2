@@ -47,134 +47,46 @@
       class="w-[90vw] ml-[4.5vw] mr-[4.5vw] scroll-wrapper overflow-hidden"
       ref="scroll"
     >
-      <ul class="flex w-[187vw] justify-center scroll-content">
-        <li
-          v-for="item in menulist"
-          :key="item.id"
-          class="w-[16vw] mr-[3.5vw] scroll-item"
-        >
-          <img :src="item.iconUrl" alt="" class="red-image w-[15vw]" />
-          <p class="text-[3vw] text-center">{{ item.name }}</p>
-        </li>
-      </ul>
+      <RecommondMenu
+        :menulist="menulist"
+        class="flex w-[187vw] justify-center scroll-content relative"
+      ></RecommondMenu>
     </div>
     <!-- 推荐歌单 -->
     <div class="m-[5vw]">
-      <h1 class="text-[5vw] font-medium">推荐歌单></h1>
+      <h1 class="text-[5vw] font-medium flex">
+        推荐歌单<Icon icon="uiw:right" class="mt-[1.5vw]" />
+      </h1>
       <div
         class="scroll-wrapper overflow-hidden w-[90vw] m-[4.5vw] ml-0"
         ref="presona"
       >
-        <ul class="flex w-[500vw] scroll-content">
-          <li
-            v-for="item in personalized"
-            :key="item.id"
-            class="w-[40vw] mr-[4.5vw] scroll-item"
-          >
-            <img :src="item.picUrl" alt="" class="w-[40vw] rounded-[20px]" />
-            <p class="text-[3.5vw]">{{ item.name }}</p>
-          </li>
-        </ul>
+        <RecommendedSongList
+          class="flex w-[500vw] scroll-content"
+          :personalized="personalized"
+        />
       </div>
     </div>
     <!-- 新歌速递 -->
     <div class="m-[5vw]">
-      <h1 class="text-[5vw] font-semibold text-white">新歌新碟\ 数字专辑></h1>
+      <h1 class="text-[5vw] font-semibold text-white flex">
+        新歌新碟\ 数字专辑<Icon icon="uiw:right" class="mt-[1.5vw]" />
+      </h1>
       <div
         class="scroll-wrapper overflow-hidden w-[90vw] m-[4.5vw] ml-0"
         ref="song"
       >
-        <ul class="flex w-[2990vw] flex-wrap scroll-content">
-          <li
-            v-for="item in song"
-            :key="item.song"
-            class="w-[85vw] scroll-item"
-          >
-            <div class="flex">
-              <img :src="item.album.picUrl" alt="" class="w-[25vw]" />
-              <div class="pl-[3vw] pt-[3vw] pb-[3vw] w-[40vw]">
-                <h1
-                  class="text-ellipsis overflow-hidden whitespace-nowrap leading-[15vw] text-[3vw]"
-                >
-                  {{ item.album.name }}
-                </h1>
-                <p
-                  class="text-ellipsis overflow-hidden whitespace-nowrap text-[3vw]"
-                >
-                  {{ item.album.alias[0] }}
-                </p>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <NewSongExpress
+          class="flex w-[2990vw] flex-wrap scroll-content"
+          :song="song"
+        />
       </div>
     </div>
     <!-- 排行榜 -->
     <div class="m-[5vw]">
       <h1 class="text-[5vw] font-semibold text-black">排行榜\</h1>
       <div class="w-[90vw] scroll-wrapper overflow-hidden" ref="blocks">
-        <div class="w-[600vw] flex scroll-content">
-          <div
-            v-for="item in blocks"
-            :key="item.id"
-            class="p-[2vw] mr-[10vw] overflow-hidden w-[90vw] m-[2.5vw] ml-0 h-[50vw] bg-white scroll-item"
-            ref="song"
-          >
-            <div class="flex justify-between w-[100%]">
-              <h1 class="text-[5vw] font-semibold w-[25vw] leading-[10vw]">
-                {{ item.uiElement.mainTitle.title }}
-              </h1>
-              <p
-                class="text-[3vw] leading-[10vw] text-ellipsis overflow-hidden whitespace-nowrap w-[30vw]"
-              >
-                {{ item.uiElement.mainTitle.titleDesc }}
-              </p>
-            </div>
-            <ul class="">
-              <li
-                v-for="(items, indexs) in 3"
-                :key="indexs.id"
-                class="mb-[3vw]"
-              >
-                <div class="flex relative w-[100%]">
-                  <img
-                    :src="
-                      item.resources[indexs].resourceExtInfo?.songData.album
-                        .blurPicUrl
-                    "
-                    class="w-[10vw]"
-                    alt=""
-                  />
-                  <p class="text-[5vw] w-[10vw] text-center">
-                    {{ indexs + 1 }}
-                  </p>
-                  <div>
-                    <p
-                      class="text-[3.5vw] font-normal w-[40vw] text-ellipsis overflow-hidden whitespace-nowrap"
-                    >
-                      {{
-                        item.resources[indexs].resourceExtInfo?.songData.name
-                      }}
-                    </p>
-                    <p class="text-[2.5vw]">
-                      {{
-                        item.resources[indexs].resourceExtInfo?.artists[0].name
-                      }}
-                      <span
-                        class="absolute w-[8vw] h-[5vw] right-[3vw] text-[3vw] top-[1vw]"
-                        ref="sps"
-                        :style="{ color: 'red' }"
-                        >{{
-                          item.resources[indexs]?.uiElement.labelText.text
-                        }}</span
-                      >
-                    </p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <TheCharts class="w-[600vw] flex scroll-content" :blocks="blocks" />
       </div>
     </div>
     <!-- 热门话题 -->
@@ -225,13 +137,18 @@
       <div class="w-[90vw] ml-0 m-[3vw] bg-cyan-100">
         <ul class="p-[5vw] w-[100%] pb-[2vw]">
           <li
-            v-for="item in calendar"
-            :key="item.id"
+            v-for="(item, index) in calendar"
+            :key="index.id"
             class="w-[80vw] h-[15vw] flex justify-between mb-[4vw]"
           >
             <div>
               <h1 class="text-[3vw]">
-                今天 06/27
+                {{
+                  new Date().getMonth() +
+                  1 +
+                  '/' +
+                  (new Date().getDate() - index)
+                }}
                 <span class="ml-[1vw] text-[2.5vw]">{{ item.tag }}</span>
               </h1>
               <p class="text-[3.5vw]">{{ item.title }}</p>
@@ -246,6 +163,10 @@
 <script>
 import BScroll from '@better-scroll/core';
 import { Swipe, SwipeItem } from 'vant';
+import RecommondMenu from './components/RecommondMenu.vue';
+import NewSongExpress from './components/NewSongExpress.vue';
+import TheCharts from './components/TheCharts.vue';
+import RecommendedSongList from './components/RecommendedSongList.vue';
 // import _ from 'lodash';
 import {
   fetchSearchDefault,
@@ -258,12 +179,16 @@ import {
   fetchblocks,
   fetchhot,
   fetchcalendar,
-} from '../request/index';
+} from '../../request/index';
 
 export default {
   components: {
     VanSwipe: Swipe,
     VanSwipeItem: SwipeItem,
+    RecommondMenu,
+    RecommendedSongList,
+    NewSongExpress,
+    TheCharts,
   },
   data() {
     return {
@@ -280,6 +205,7 @@ export default {
       defaultSearch: [],
       searchSuggest: [],
       calendar: [],
+      day: '',
     };
   },
   beforeUnmount() {
@@ -342,7 +268,6 @@ export default {
     // 音乐日历
     const res7 = await fetchcalendar();
     this.calendar = res7.data.data.calendarEvents;
-    console.log(this.calendar);
   },
   watch: {
     async userSearchkeywords(keywords) {
