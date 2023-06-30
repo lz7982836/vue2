@@ -8,12 +8,12 @@
     >
       <div class="flex justify-between w-[100%]">
         <h1 class="text-[5vw] font-semibold w-[25vw] leading-[10vw]">
-          {{ item.uiElement.mainTitle.title }}
+          {{ item.uiElement.mainTitle?.title }}
         </h1>
         <p
           class="text-[3vw] leading-[10vw] text-ellipsis overflow-hidden whitespace-nowrap w-[30vw]"
         >
-          {{ item.uiElement.mainTitle.titleDesc }}
+          {{ item.uiElement.mainTitle?.titleDesc }}
         </p>
       </div>
       <ul class="">
@@ -42,7 +42,7 @@
                   class="absolute w-[8vw] h-[5vw] right-[3vw] text-[3vw] top-[1vw]"
                   ref="sps"
                   :style="{ color: 'red' }"
-                  >{{ item.resources[indexs]?.uiElement.labelText.text }}</span
+                  >{{ item.resources[indexs]?.uiElement.labelText?.text }}</span
                 >
               </p>
             </div>

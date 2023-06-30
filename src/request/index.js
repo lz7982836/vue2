@@ -45,7 +45,7 @@ export const fetchmenulist = () => http.get('/homepage/dragon/ball');
  * @parm {Array} xxx
  * @returns  {Promise} xxx
  */
-export const fetchpersonalized = () => http.get('/personalized');
+export const fetchpersonalized = () => http.get('/homepage/block/page');
 
 // 获取新歌速递
 /**

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-v-bind-sync -->
 <template>
   <div class="bg-gradient-to-r from-violet-300 to-indigo-100 opacity-0.2">
     <div class="w-[100vw] h-[20vw] p-[3vw] flex justify-between items-center">
@@ -53,20 +54,36 @@
       ></RecommondMenu>
     </div>
     <!-- 推荐歌单 -->
-    <div class="m-[5vw]">
-      <h1 class="text-[5vw] font-medium flex">
-        推荐歌单<Icon icon="uiw:right" class="mt-[1.5vw]" />
-      </h1>
-      <div
-        class="scroll-wrapper overflow-hidden w-[90vw] m-[4.5vw] ml-0"
-        ref="presona"
-      >
+    <Panel label="推荐歌单">
+      <template #header>
+        <div class="relative">
+          <div class="w-[40vw] h-[40vw] mr-[4.5vw] overflow-hidden relative">
+            <Animation
+              v-for="(item, index) in personalizedtwo"
+              :key="index.id"
+              :personalizedtwo="item"
+              :personalizedthree="personalizedtwo"
+              :index="index"
+              v-bind:text.sync="text"
+            ></Animation>
+          </div>
+          <p class="text-[3.5vw] absolute top-[40vw]">
+            {{
+              text === null
+                ? personalizedtwo[0]?.uiElement.mainTitle.title
+                : text
+            }}
+          </p>
+        </div>
         <RecommendedSongList
-          class="flex w-[500vw] scroll-content"
-          :personalized="personalized"
-        />
-      </div>
-    </div>
+          :personalized="item"
+          v-for="item in personalized"
+          :key="item.id"
+          class="w-[40vw] mr-[4.5vw] scroll-item relative"
+        ></RecommendedSongList>
+      </template>
+    </Panel>
+
     <!-- 新歌速递 -->
     <div class="m-[5vw]">
       <h1 class="text-[5vw] font-semibold text-white flex">
@@ -138,8 +155,8 @@
         <ul class="p-[5vw] w-[100%] pb-[2vw]">
           <li
             v-for="(item, index) in calendar"
-            :key="index.id"
             class="w-[80vw] h-[15vw] flex justify-between mb-[4vw]"
+            :key="index.id"
           >
             <div>
               <h1 class="text-[3vw]">
@@ -158,6 +175,45 @@
         </ul>
       </div>
     </div>
+    <!-- 无 ->有（enter进场动画）
+    .[name]-enter{}
+    .[name]-enter-to{}
+
+     有->(leave离场动画)
+     .[name]-leave{}
+    .[name]-leave-to{}
+    -->
+    <!-- <button @click="visible = !visible">toggle</button>
+    <div class="w-[200px] h-[200px] border-[1px] overflow-hidden relative">
+      <transition name="abc" class="">
+        <div
+          v-if="visible"
+          class="w-[200px] h-[200px] bg-orange-600 absolute top-0 left-0"
+        ></div>
+      </transition>
+      <transition name="abc">
+        <div
+          v-if="!visible"
+          class="w-[200px] h-[200px] bg-teal-400 absolute top-0 left-0"
+        ></div>
+      </transition>
+    </div> -->
+
+    <!-- <button @click="drawerVisible = !drawerVisible">drawerVisibleToggle</button> -->
+    <!-- <Drawer :visible="drawerVisible" @自定义事件="(e) => (drawerVisible = e)"> -->
+    <!-- <Drawer v-bind:visible.sync="drawerVisible">
+      <template #header>
+        <div class="flex justify-between items-center">
+          <p>推荐歌单</p>
+          <Icon
+            icon="ph:x-bold"
+            width="5vw"
+            height="5vw"
+            v-on:click="drawerVisible"
+          />
+        </div>
+      </template>
+    </Drawer> -->
   </div>
 </template>
 <script>
@@ -167,6 +223,8 @@ import RecommondMenu from './components/RecommondMenu.vue';
 import NewSongExpress from './components/NewSongExpress.vue';
 import TheCharts from './components/TheCharts.vue';
 import RecommendedSongList from './components/RecommendedSongList.vue';
+import Panel from './components/Panel.vue';
+import Animation from './components/Animation.vue';
 // import _ from 'lodash';
 import {
   fetchSearchDefault,
@@ -189,6 +247,8 @@ export default {
     RecommendedSongList,
     NewSongExpress,
     TheCharts,
+    Panel,
+    Animation,
   },
   data() {
     return {
@@ -206,6 +266,9 @@ export default {
       searchSuggest: [],
       calendar: [],
       day: '',
+      drawerVisible: false,
+      personalizedtwo: [],
+      text: null,
     };
   },
   beforeUnmount() {
@@ -213,12 +276,15 @@ export default {
   },
   mounted() {
     this.init(this.$refs.scroll);
-    this.init(this.$refs.presona);
+    // this.init(this.$refs.presona);
     this.init(this.$refs.song);
     this.init(this.$refs.blocks);
     this.init(this.$refs.hot);
   },
   methods: {
+    boolean() {
+      this.drawerVisible = false;
+    },
     init(name) {
       this.bs = new BScroll(name, {
         scrollX: true,
@@ -237,6 +303,7 @@ export default {
     },
   },
   async created() {
+    // console.log();
     // 搜索框
     const res = await fetchSearchDefault();
     this.defaultSearch = res.data.data;
@@ -251,7 +318,14 @@ export default {
 
     // 推荐歌单
     const res3 = await fetchpersonalized();
-    this.personalized = res3.data.result.slice(0, 12);
+    this.personalized = res3.data.data.blocks[1].creatives.slice(1, 6);
+
+    const restwo = await fetchpersonalized();
+    this.personalizedtwo = restwo.data.data.blocks[1].creatives.slice(
+      0,
+      1
+    )[0].resources;
+    console.log(this.personalizedtwo);
 
     // 新歌速递
     const res4 = await fetchsong();
@@ -267,7 +341,7 @@ export default {
 
     // 音乐日历
     const res7 = await fetchcalendar();
-    this.calendar = res7.data.data.calendarEvents;
+    this.calendar = res7.data.data.calendarEvents.slice(0, 2);
   },
   watch: {
     async userSearchkeywords(keywords) {
@@ -313,9 +387,5 @@ export default {
 }
 .van-swipe__track {
   display: flex !important;
-}
-
-.red-image {
-  filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='colorize'><feColorMatrix type='matrix' values='1 0 0 0 0.698 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter></svg>#colorize");
 }
 </style>
