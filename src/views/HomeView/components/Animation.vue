@@ -3,7 +3,7 @@
     <transition name="animation">
       <div
         v-if="visible === index + 1"
-        class="w-[40vw] absolute top-0 left-0 mr-[4.5vw] scroll-item"
+        class="w-[40vw] absolute top-[1vw] left-0 mr-[4.5vw] scroll-item z-[5]"
       >
         <img
           :src="personalizedtwo.uiElement.image.imageUrl"
@@ -53,7 +53,7 @@ export default {
         'update:text',
         this.personalizedthree[this.visible - 1].uiElement.mainTitle.title
       );
-    }, 5000);
+    }, 4000);
   },
 };
 </script>
@@ -62,7 +62,7 @@ export default {
   transform: translateY(100%) scale(0.7);
 }
 .animation-enter-active {
-  transition: all ease-in-out 3s;
+  transition: all ease-in-out 0.5s;
 }
 .animation-enter-to {
   transform: translateY(0) scale(1);
@@ -71,7 +71,7 @@ export default {
   transform: translateY(0) scale(1);
 }
 .animation-leave-active {
-  transition: all ease-in-out 3s;
+  transition: all ease-in-out 0.5s;
 }
 .animation-leave-to {
   transform: translateY(-100%) scale(0.7);

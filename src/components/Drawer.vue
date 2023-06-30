@@ -1,39 +1,85 @@
 <template>
-  <div @click="clickHandler">
-    <transition name="slide">
+  <div @click="clickHander">
+    <div
+      class="bg-black opacity-40 fixed top-0 left-0 bottom-0 right-0 z-[10]"
+      ref="drawerMask"
+      v-if="visible"
+    ></div>
+    <transition :name="direction">
       <div
+        class="bg-[#fff] dark:bg-[rgb(39,39,39)] fixed z-[11] rounded-t-lg"
         v-show="visible"
-        class="w-screen fixed left-0 bottom-0 z-[999] h-[60vw] bg-[#fff] rounded-[5vw] rounded-b-[0] px-[4vw]"
+        :style="drawerContentStyle"
       >
-        <div>
-          <slot name="head"></slot>
+        <div class="">
+          <slot name="head">
+            <div class="flex justify-between items-center">
+              <p class="text-[939BA1]">{{ title }}</p>
+              <Icon icon="clarity:times-line" @click.native="closeDrawer" />
+            </div>
+          </slot>
         </div>
         <div>
-          <slot></slot>
+          <slot>default slot default value </slot>
         </div>
       </div>
     </transition>
-    <div
-      v-if="visible"
-      class="w-screen h-screen bg-black opacity-20 fixed left-0 bottom-0 z-[998]"
-      ref="drawerMask"
-    ></div>
   </div>
 </template>
 
 <script>
 export default {
+  //单向数据流(父级通过props传递始子組件的数据子組件没有权利修改)
+  name: 'Drawer',
+  //计算属性
+  computed: {
+    drawerContentStyle() {
+      if (this.direction === 'btt') {
+        return {
+          width: '100vw',
+          left: 0,
+          bottom: -0.5 + 'vw',
+          padding: 5 + 'vw',
+        };
+      } else if (this.direction === 'ttb') {
+        return { width: '100vw', left: 0, top: 0 };
+      } else if (this.direction === 'ltr') {
+        return { height: '100vh', left: 0, top: 0 };
+      } else if (this.direction === 'rtl') {
+        return { height: '100vh', right: 0, top: 0 };
+      }
+    },
+  },
   props: {
     visible: {
       type: Boolean,
       required: true,
     },
+    title: {
+      type: String,
+      default: '默认标题',
+    },
+    direction: {
+      type: String,
+      default: 'btt',
+      validator(direction) {
+        return ['ttb', 'btt', 'ltr', 'rtl'].includes(direction);
+      },
+    },
+    width: {
+      type: [Number, String],
+      default: '80%',
+    },
   },
   methods: {
-    clickHandler(e) {
+    closeDrawer() {
+      this.$emit('update:visible', false);
+    },
+    clickHander(e) {
       if (e.target === this.$refs.drawerMask) {
-        // this.visible = false;
+        //使用vm.$emit给父组件传递数据
         this.$emit('update:visible', false);
+        this.closeDrawer();
       }
     },
   },
@@ -41,16 +87,55 @@ export default {
 </script>
 
 <style scoped>
-.slide-enter,
-.slide-leave-to {
+.btt-enter,
+.btt-leave-to {
   transform: translateY(100%);
 }
-.slide-enter-active,
-.slide-leave-active {
+.btt-enter-active,
+.btt-leave-active {
   transition: all ease-in-out 0.5s;
 }
-.slide-enter-to,
-.slide-leave {
+.btt-enter-to,
+.btt-leave {
   transform: translateY(0);
+}
+
+.ttb-enter,
+.ttb-leave-to {
+  transform: translateY(-100%);
+}
+.ttb-enter-active,
+.ttb-leave-active {
+  transition: all ease-in-out 0.5s;
+}
+.ttb-enter-to,
+.ttb-leave {
+  transform: translateY(0);
+}
+
+.ltr-enter,
+.ltr-leave-to {
+  transform: translateX(-100%);
+}
+.ltr-enter-active,
+.ltr-leave-active {
+  transition: all ease-in-out 0.5s;
+}
+.ltr-enter-to,
+.ltr-leave {
+  transform: translateX(0);
+}
+
+.rtl-enter,
+.rtl-leave-to {
+  transform: translateX(100%);
+}
+.rtl-enter-active,
+.rtl-leave-active {
+  transition: all ease-in-out 0.5s;
+}
+.rtl-enter-to,
+.rtl-leave {
+  transform: translateX(0);
 }
 </style>

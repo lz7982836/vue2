@@ -1,181 +1,190 @@
 <!-- eslint-disable vue/no-deprecated-v-bind-sync -->
 <template>
-  <div class="bg-gradient-to-r from-violet-300 to-indigo-100 opacity-0.2">
-    <div class="w-[100vw] h-[20vw] p-[3vw] flex justify-between items-center">
-      <Icon icon="vaadin:lines" color="black" width="6vw" height="6vw" />
-      <div class="relative">
-        <label for="">
-          <input
-            type="text"
-            :placeholder="defaultSearch.showKeyword"
-            v-model="userSearchKeywords"
-            class="text-[3vw] pl-[8vw] bg-gradient-to-r from-violet-300 to-indigo-200 opacity-0.2 text-zinc-50 w-[75vw] h-[10vw] border-2 border-violet-400 rounded-[25px]"
-          />
-        </label>
-        <Icon
-          icon="tabler:search"
-          color="#6f778f"
-          class="absolute left-[3.68vw] top-[3vw]"
-          width="4.5vw"
-          @click.native="searchHandler"
-        />
-        <Icon
-          icon="tabler:scan"
-          color="#78758b"
-          class="absolute right-[3.68vw] top-[3vw]"
-          width="4.5vw"
-        />
-      </div>
-
-      <Icon icon="vaadin:mute" color="black" width="6vw" height="6vw" />
-    </div>
-    <!-- 轮播图 -->
-    <section
-      class="w-[100%] h-[36vw] rounded-2xl flex items-center overflow-hidden"
-    >
-      <van-swipe
-        :autoplay="2000"
-        class="w-[100%] h-[100%] overflow-hidden relative"
-      >
-        <van-swipe-item v-for="item in menu" :key="item.id">
-          <img :src="item.pic" class="w-[100%] h-[100%]" />
-        </van-swipe-item>
-      </van-swipe>
-      <van-pagination :total-items="6" :items-per-page="1" />
-    </section>
-    <!-- 每日推荐 -->
+  <div
+    class="h-[100vh]"
+    :class="{ dark: darkMode }"
+    :style="{ overflow: drawerVisible ? 'hidden' : 'auto' }"
+  >
     <div
-      class="w-[90vw] ml-[4.5vw] mr-[4.5vw] scroll-wrapper overflow-hidden"
-      ref="scroll"
+      class="dark:bg-gradient-to-r dark:from-[rgb(28,25,52)] dark:to-[rgb(27,27,35)] bg-gradient-to-r from-violet-100 to-indigo-100 opacity-0.2"
     >
-      <RecommondMenu
-        :menulist="menulist"
-        class="flex w-[187vw] justify-center scroll-content relative"
-      ></RecommondMenu>
-    </div>
-    <!-- 推荐歌单 -->
-    <Panel label="推荐歌单">
-      <template #header>
+      <div class="w-[100vw] h-[20vw] p-[3vw] flex justify-between items-center">
+        <Icon
+          icon="vaadin:lines"
+          @click.native="drawerVisible = !drawerVisible"
+          width="6vw"
+          height="6vw"
+          class="dark:text-[rgb(234,234,236)] text-[black]"
+        />
         <div class="relative">
-          <div class="w-[40vw] h-[40vw] mr-[4.5vw] overflow-hidden relative">
-            <Animation
-              v-for="(item, index) in personalizedtwo"
-              :key="index.id"
-              :personalizedtwo="item"
-              :personalizedthree="personalizedtwo"
-              :index="index"
-              v-bind:text.sync="text"
-            ></Animation>
-          </div>
-          <p class="text-[3.5vw] absolute top-[40vw]">
-            {{
-              text === null
-                ? personalizedtwo[0]?.uiElement.mainTitle.title
-                : text
-            }}
-          </p>
+          <label for="">
+            <input
+              type="text"
+              :placeholder="defaultSearch.showKeyword"
+              v-model="userSearchKeywords"
+              class="dark:bg-gradient-to-r dark:from-[rgb(28,25,52)] dark:to-[rgb(27,27,35)] dark:border-2 dark:border-[rgb(49,45,78)] text-[3vw] pl-[8vw] bg-gradient-to-r from-violet-300 to-indigo-200 opacity-0.2 text-zinc-50 w-[75vw] h-[10vw] border-2 border-violet-400 rounded-[25px]"
+            />
+          </label>
+          <Icon
+            icon="tabler:search"
+            color="#6f778f"
+            class="absolute left-[3.68vw] top-[3vw]"
+            width="4.5vw"
+            @click.native="searchHandler"
+          />
+          <Icon
+            icon="tabler:scan"
+            color="#78758b"
+            class="absolute right-[3.68vw] top-[3vw]"
+            width="4.5vw"
+          />
         </div>
-        <RecommendedSongList
-          :personalized="item"
-          v-for="item in personalized"
-          :key="item.id"
-          class="w-[40vw] mr-[4.5vw] scroll-item relative"
-        ></RecommendedSongList>
-      </template>
-    </Panel>
 
-    <!-- 新歌速递 -->
-    <div class="m-[5vw]">
-      <h1 class="text-[5vw] font-semibold text-white flex">
-        新歌新碟\ 数字专辑<Icon icon="uiw:right" class="mt-[1.5vw]" />
-      </h1>
-      <div
-        class="scroll-wrapper overflow-hidden w-[90vw] m-[4.5vw] ml-0"
-        ref="song"
-      >
-        <NewSongExpress
-          class="flex w-[2990vw] flex-wrap scroll-content"
-          :song="song"
+        <Icon
+          icon="vaadin:mute"
+          width="6vw"
+          height="6vw"
+          class="dark:text-[rgb(234,234,236)] text-[black]"
         />
       </div>
-    </div>
-    <!-- 排行榜 -->
-    <div class="m-[5vw]">
-      <h1 class="text-[5vw] font-semibold text-black">排行榜\</h1>
-      <div class="w-[90vw] scroll-wrapper overflow-hidden" ref="blocks">
-        <TheCharts class="w-[600vw] flex scroll-content" :blocks="blocks" />
+      <!-- 轮播图 -->
+      <section
+        class="w-[100%] h-[36vw] rounded-2xl flex items-center overflow-hidden"
+      >
+        <van-swipe
+          :autoplay="2000"
+          class="w-[100%] h-[100%] overflow-hidden relative"
+        >
+          <van-swipe-item v-for="item in menu" :key="item.id">
+            <img :src="item.pic" class="w-[100%] h-[100%]" />
+          </van-swipe-item>
+        </van-swipe>
+        <van-pagination :total-items="6" :items-per-page="1" />
+      </section>
+      <!-- 每日推荐 -->
+      <div
+        class="w-[90vw] ml-[4.5vw] mr-[4.5vw] scroll-wrapper overflow-hidden"
+        ref="scroll"
+      >
+        <RecommondMenu
+          :menulist="menulist"
+          class="flex w-[187vw] justify-center scroll-content relative"
+        ></RecommondMenu>
       </div>
-    </div>
-    <!-- 热门话题 -->
-    <div class="m-[5vw]">
-      <div>
-        <h1 class="text-[4vw] text-white">热门话题</h1>
-      </div>
-      <div class="scroll-wrapper overflow-hidden" ref="hot">
-        <div class="flex w-[540vw] scroll-content">
-          <div
+      <!-- 推荐歌单 -->
+      <Panel label="推荐歌单" :length="6" :width="40" :margin="4.5">
+        <template #header>
+          <div class="relative">
+            <div
+              class="w-[40vw] h-[40vw] mr-[4.5vw] pt-[2vw] overflow-hidden relative"
+            >
+              <Animation
+                v-for="(item, index) in personalizedtwo"
+                :key="index.id"
+                :personalizedtwo="item"
+                :personalizedthree="personalizedtwo"
+                :index="index"
+                v-bind:text.sync="text"
+              ></Animation>
+              <div
+                class="w-[26vw] h-[31vw] bg-[#f8f7f7] absolute top-[0vw] left-1/2 -translate-x-1/2 rounded-[8px] z-[0]"
+              ></div>
+            </div>
+            <p
+              class="text-[3.5vw] absolute top-[40vw] dark:text-[rgb(234,234,236)]"
+            >
+              {{
+                text === null
+                  ? personalizedtwo[0]?.uiElement.mainTitle.title
+                  : text
+              }}
+            </p>
+          </div>
+          <RecommendedSongList
+            :personalized="item"
+            v-for="item in personalized"
+            :key="item.id"
+            class="w-[40vw] h-[55vw] pt-[1vw] mr-[4.5vw] scroll-item relative"
+          ></RecommendedSongList>
+        </template>
+      </Panel>
+
+      <!-- 新歌速递 -->
+      <Panel label="新歌速递" :length="32" :width="85" :margin="10">
+        <template #header>
+          <NewSongExpress
+            :item="item"
+            v-for="item in song"
+            :key="item.song"
+            class="w-[85vw] scroll-item"
+          ></NewSongExpress>
+        </template>
+      </Panel>
+
+      <!-- 排行榜 -->
+      <Panel label="排行榜" :length="6" :width="90" :margin="10">
+        <template #header>
+          <TheCharts
+            v-for="item in blocks"
+            :item="item"
+            :key="item.id"
+            class="p-[2vw] mr-[10vw] overflow-hidden w-[90vw] mb-[2.5vw] ml-0 h-[60vw] bg-white dark:bg-[rgb(37,37,45)] scroll-item rounded-[15px]"
+            ref="song"
+          ></TheCharts>
+        </template>
+      </Panel>
+
+      <!-- 热门话题 -->
+      <Panel label="热门话题" :length="5" :width="90" :margin="5">
+        <template #header>
+          <HotTopic
             v-for="item in hot"
             :key="item.id"
+            :item="item"
             class="scroll-item p-[5vw] w-[90vw] mr-[5vw] mt-[3vw] mb-[5vw] bg-slate-500 h-[35vw] rounded-[15px]"
+          ></HotTopic>
+        </template>
+      </Panel>
+      <!-- 音乐日历 -->
+      <Panel label="音乐日历">
+        <template #header>
+          <div
+            class="w-[90vw] ml-0 m-[3vw] bg-white rounded-[15px] p-[5vw] pb-[2vw] dark:bg-[rgb(37,37,45)]"
           >
-            <div class="flex">
-              <Icon icon="uiw:message" color="white" width="5vw" height="5vw" />
-              <h1 class="text-white text-[4vw] ml-[2vw]">
-                {{ item.user.nickname }}
-              </h1>
-            </div>
-            <p class="text-[#ccc] text-[3vw]">
-              {{ item.tailMark?.circle?.member }}热度
-            </p>
-            <div class="flex justify-between">
-              <p class="text-white leading-[25vw] text-[3vw]">
-                {{ item.tailMark?.markTitle }}
-              </p>
-              <img
-                :src="item.tailMark?.circle?.imageUrl"
-                alt=""
-                class="w-[15vw] h-[15vw]"
-              />
-            </div>
+            <MusicCalendar
+              v-for="(item, index) in calendar"
+              class="w-[80vw] h-[15vw] flex justify-between mb-[7vw] mt-[2vw]"
+              :key="index.id"
+              :item="item"
+              :index="index"
+            >
+            </MusicCalendar>
           </div>
+        </template>
+      </Panel>
+      <!-- <div class="m-[5vw] pb-[20vw]">
+      <div class="flex items-center">
+        <h1 class="text-[5vw] text-white">音乐日历</h1>
+        <div
+          class="flex w-[18vw] h-[5vw] rounded-[5vw] ml-[2vw] mt-[1.5vw] bg-[#e8e6e6] justify-center opacity-0.2 text-[3vw]"
+        >
+          今日2条<Icon icon="uiw:right" class="mt-[1vw]" />
         </div>
       </div>
-    </div>
-    <!-- 音乐日历 -->
-    <div class="m-[5vw]">
-      <div>
-        <h1 class="text-[5vw] text-white">
-          音乐日历&nbsp;<span
-            class="inline-block w-[15vw] h-[4vw] rounded-[15px] bg-[#ccc] text-center opacity-0.2 text-[3vw]"
-            >今日2条></span
-          >
-        </h1>
-      </div>
-      <div class="w-[90vw] ml-0 m-[3vw] bg-cyan-100">
-        <ul class="p-[5vw] w-[100%] pb-[2vw]">
-          <li
+      <div class="w-[90vw] ml-0 m-[3vw] bg-white rounded-[15px]">
+        <div class="p-[5vw] w-[100%] pb-[2vw]">
+          <MusicCalendar
             v-for="(item, index) in calendar"
-            class="w-[80vw] h-[15vw] flex justify-between mb-[4vw]"
+            class="w-[80vw] h-[15vw] flex justify-between mb-[7vw] mt-[2vw]"
             :key="index.id"
+            :item="item"
+            :index="index"
           >
-            <div>
-              <h1 class="text-[3vw]">
-                {{
-                  new Date().getMonth() +
-                  1 +
-                  '/' +
-                  (new Date().getDate() - index)
-                }}
-                <span class="ml-[1vw] text-[2.5vw]">{{ item.tag }}</span>
-              </h1>
-              <p class="text-[3.5vw]">{{ item.title }}</p>
-            </div>
-            <img :src="item.imgUrl" alt="" class="w-[15vw] h-[15vw]" />
-          </li>
-        </ul>
+          </MusicCalendar>
+        </div>
       </div>
-    </div>
-    <!-- 无 ->有（enter进场动画）
+    </div> -->
+      <!-- 无 ->有（enter进场动画）
     .[name]-enter{}
     .[name]-enter-to{}
 
@@ -183,7 +192,7 @@
      .[name]-leave{}
     .[name]-leave-to{}
     -->
-    <!-- <button @click="visible = !visible">toggle</button>
+      <!-- <button @click="visible = !visible">toggle</button>
     <div class="w-[200px] h-[200px] border-[1px] overflow-hidden relative">
       <transition name="abc" class="">
         <div
@@ -199,21 +208,91 @@
       </transition>
     </div> -->
 
-    <!-- <button @click="drawerVisible = !drawerVisible">drawerVisibleToggle</button> -->
-    <!-- <Drawer :visible="drawerVisible" @自定义事件="(e) => (drawerVisible = e)"> -->
-    <!-- <Drawer v-bind:visible.sync="drawerVisible">
-      <template #header>
-        <div class="flex justify-between items-center">
-          <p>推荐歌单</p>
-          <Icon
-            icon="ph:x-bold"
-            width="5vw"
-            height="5vw"
-            v-on:click="drawerVisible"
-          />
+      <!-- <button @click="drawerVisible = !drawerVisible">drawerVisibleToggle</button> -->
+      <!-- <Drawer :visible="drawerVisible" @自定义事件="(e) => (drawerVisible = e)"> -->
+
+      <!--侧边栏抽屉-->
+      <Drawer :visible.sync="drawerVisible" direction="ltr" :no="noscroll">
+        <template #head>
+          <div
+            class="flex justify-between items-center h-[16vw] px-[5vw] w-[84vw] dark:bg-black bg-[#f1f1f1]"
+          >
+            <!-- 用户头像开始 -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div
+                  class="w-[7vw] h-[7vw] rounded-[50%] mr-[2vw] bg-[#f4f4f1] flex items-center justify-center overflow-hidden"
+                >
+                  <Icon
+                    icon="gridicons:user"
+                    class="w-[7vw] h-[7vw] text-[#f9dada] dark:text-[white]"
+                  />
+                </div>
+                <span class="text-[3.5vw] text-[#000] dark:text-[white]"
+                  >立即登录</span
+                >
+                <Icon
+                  icon="mingcute:right-line"
+                  class="text-[4vw] text-[#383838] dark:text-[white]"
+                />
+              </div>
+            </div>
+            <Icon
+              icon="teenyicons:scan-outline"
+              class="text-[5vw] text-[#383838] dark:text-[white]"
+            />
+            <!-- 用户头像结束 -->
+          </div>
+        </template>
+        <div
+          class="dark:bg-black pt-[5vw] bg-[#f1f1f1] h-[95vh] scroll-wrapper overflow-hidden"
+          ref="scroll5"
+        >
+          <div class="scroll-content h-[420vw]">
+            <div
+              class="mx-auto w-[76vw] h-[27.66vw] bg-gradient-to-r from-[#3b3b3b] to-[#5f5050] px-[3.96vw] text-[#9e8f8f] rounded-[20px]"
+            >
+              <div class="h-[10vw] flex justify-between items-center">
+                <h1 class="text-[3.6vw] text-[#ffeeeb]">开通黑胶VIP</h1>
+                <div
+                  class="w-[15.78vw] h-[6.56vw] leading-[6vw] text-center rounded-[100px] border-[1px] border-[#9e8f8f] text-[2.5vw] mt-[3vw]"
+                >
+                  会员中心
+                </div>
+              </div>
+              <div class="h-[7vw] border-b-[1px] border-[#494443]">
+                <p class="text-[2.73vw]">点击恢复超21项专属特权</p>
+              </div>
+              <div
+                class="h-[11vw] leading-[11vw] flex justify-between items-center mr-[4.45vw]"
+              >
+                <div class="text-[2.5vw] h-[11vw]">
+                  受邀专享，黑胶VIP低至0.27元/天!
+                </div>
+                <div class="scale-50 w-[8vw]">
+                  <div
+                    class="w-[22vw] h-[22vw] rounded-[10px] bg-[#e54701] text-[#fff] pl-[3vw] text-[8vw] scale-50"
+                  >
+                    受邀专享
+                  </div>
+                </div>
+              </div>
+            </div>
+            <LeftSidebarModuleView
+              v-for="item in DrawerData"
+              :key="item"
+              :item="item"
+              :checks.sync="darkMode"
+            />
+            <div
+              class="dark:bg-[#2c2c2c] h-[12vw] px-[3.6vw] bg-[#fff] w-[76vw] mt-[4vw] rounded-[15px] mx-auto leading-[12vw] text-center text-[3.6vw] text-[#ef4239]"
+            >
+              关闭云音乐
+            </div>
+          </div>
         </div>
-      </template>
-    </Drawer> -->
+      </Drawer>
+    </div>
   </div>
 </template>
 <script>
@@ -225,7 +304,13 @@ import TheCharts from './components/TheCharts.vue';
 import RecommendedSongList from './components/RecommendedSongList.vue';
 import Panel from './components/Panel.vue';
 import Animation from './components/Animation.vue';
+import HotTopic from './components/HotTopic.vue';
+import MusicCalendar from './components/MusicCalendar.vue';
+import LeftSidebarModuleView from './components/LeftSidebarModuleView.vue';
 // import _ from 'lodash';
+import ScrollBar from '@better-scroll/scroll-bar';
+
+BScroll.use(ScrollBar);
 import {
   fetchSearchDefault,
   fetchSearchSuggest,
@@ -249,6 +334,9 @@ export default {
     TheCharts,
     Panel,
     Animation,
+    HotTopic,
+    MusicCalendar,
+    LeftSidebarModuleView,
   },
   data() {
     return {
@@ -269,17 +357,112 @@ export default {
       drawerVisible: false,
       personalizedtwo: [],
       text: null,
+      DrawerData: [
+        {
+          title: false,
+          data: [
+            { icon: 'solar:letter-linear', name: '我的消息', rigth: false },
+            { icon: 'cib:shell', name: '云贝中心', rigth: '签到' },
+            { icon: 'mingcute:light-line', name: '创作者中心', rigth: false },
+          ],
+        },
+        {
+          title: '音乐服务',
+          data: [
+            {
+              icon: 'ph:star-of-david-light',
+              name: '趣测',
+              rigth: '点击查看今日运势',
+            },
+            { icon: 'ion:ticket-outline', name: '云村有票', rigth: false },
+            {
+              icon: 'mdi:help-box-outline',
+              name: '多多西西口袋',
+              rigth: false,
+            },
+            { icon: 'ep:handbag', name: '商城', rigth: false },
+            {
+              icon: 'streamline:interface-signal-square-heart-line-stats-beat-square-graph',
+              name: 'Beat专区',
+              rigth: '顶尖制作邀你创作',
+            },
+            { icon: 'tabler:bell-ringing-2', name: '口袋彩铃', rigth: false },
+            {
+              icon: 'icon-park-outline:gamepad',
+              name: '游戏专区',
+              rigth: '音乐浇灌治愈花园',
+            },
+          ],
+        },
+        {
+          title: '其他',
+          data: [
+            { icon: 'ri:settings-line', name: '设置', rigth: false },
+            {
+              icon: 'line-md:moon-loop',
+              name: '深色模式',
+              rigth: false,
+              btn: true,
+            },
+            { icon: 'mdi:alarm-clock', name: '定时关闭', rigth: false },
+            { icon: 'ph:t-shirt-thin', name: '个性装扮', rigth: false },
+            {
+              icon: 'iconoir:headset-issue',
+              name: '边听边存',
+              rigth: '未开启',
+            },
+            {
+              icon: 'iconoir:headset-issue',
+              name: '在线听歌免流量',
+              rigth: false,
+            },
+            { icon: 'solar:card-linear', name: '音乐黑名单', rigth: '未开启' },
+            {
+              icon: 'ant-design:stop-outlined',
+              name: '青少年模式',
+              rigth: '未开启',
+            },
+            { icon: 'ep:alarm-clock', name: '音乐闹钟', rigth: false },
+          ],
+        },
+        {
+          title: false,
+          data: [
+            { icon: 'iconoir:page', name: '我的订单', rigth: false },
+            { icon: 'ion:ticket-outline', name: '优惠券', rigth: false },
+            { icon: 'ep:service', name: '我的客服', rigth: false },
+            {
+              icon: 'ri:share-circle-line',
+              name: '分享网易云音乐',
+              rigth: false,
+            },
+            {
+              icon: 'ph:file-thin',
+              name: '个人信息收集与使用清单',
+              rigth: false,
+            },
+            {
+              icon: 'icon-park-outline:circle-five-line',
+              name: '个人信息第三方共享清单',
+              rigth: false,
+            },
+            { icon: 'icons8:share', name: '个人信息与隐私保护', rigth: false },
+            { icon: 'icon-park-outline:attention', name: '关于', rigth: false },
+          ],
+        },
+      ],
+      darkMode: false,
     };
+  },
+  updated() {
+    this.bs.refresh();
   },
   beforeUnmount() {
     this.bs.destroy();
   },
   mounted() {
     this.init(this.$refs.scroll);
-    // this.init(this.$refs.presona);
-    this.init(this.$refs.song);
-    this.init(this.$refs.blocks);
-    this.init(this.$refs.hot);
+    this.init1(this.$refs.scroll5);
   },
   methods: {
     boolean() {
@@ -295,6 +478,17 @@ export default {
         click: true,
       });
     },
+    init1(name) {
+      this.bs = new BScroll(name, {
+        scrollY: true,
+        probeType: 3,
+        disableMouse: true,
+        disableTouch: false,
+        mouseWheel: true,
+        click: true,
+        scrollbar: true,
+      });
+    },
     async searchHandler() {
       const res = await fetchSearchResult({
         keywords: this.userSearchKeywords || this.defaultSearch.showKeyword,
@@ -303,7 +497,6 @@ export default {
     },
   },
   async created() {
-    // console.log();
     // 搜索框
     const res = await fetchSearchDefault();
     this.defaultSearch = res.data.data;
@@ -325,7 +518,6 @@ export default {
       0,
       1
     )[0].resources;
-    console.log(this.personalizedtwo);
 
     // 新歌速递
     const res4 = await fetchsong();
