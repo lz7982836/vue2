@@ -97,3 +97,27 @@ export const fetchSearchResult = (params) =>
   http.get('/cloudsearch', { params });
 
 export const fetchSearchSuggest = () => http.get();
+
+// 热搜
+/**
+ * @description 获取热搜数据
+ * @parm {Array} xxx
+ * @returns  {Promise} xxx
+ */
+export const fetchSearchDetail = () => http.get('/search/hot/detail');
+
+// 排行榜
+/**
+ * @description 获取排行榜数据
+ * @parm {Array} xxx
+ * @returns  {Promise} xxx
+ */
+export async function fetchPlaylist() {
+  const res = await http.get('/toplist/detail');
+  const playlist = await Promise.all(
+    res.data.list.map(({ id }) =>
+      http.get('/playlist/detail', { params: { id } })
+    )
+  );
+  return playlist.map((item) => item.data.playlist);
+}

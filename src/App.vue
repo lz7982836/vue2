@@ -2,9 +2,9 @@
   <div>
     <!-- 声明式导航 -->
     <!-- <router-link to="/></router-link> -->
-    <router-link :to="{ path: '/IndexView', query: { id: 123 } }"
+    <!-- <router-link :to="{ path: '/IndexView', query: { id: 123 } }"
       >go tu IndexView</router-link
-    >
+    > -->
     <router-view />
   </div>
 </template>

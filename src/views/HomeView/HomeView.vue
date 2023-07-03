@@ -16,12 +16,14 @@
           height="6vw"
           class="dark:text-[rgb(234,234,236)] text-[black]"
         />
+
         <div class="relative">
           <label for="">
             <input
               type="text"
               :placeholder="defaultSearch.showKeyword"
               v-model="userSearchKeywords"
+              @focus="search"
               class="dark:bg-gradient-to-r dark:from-[rgb(28,25,52)] dark:to-[rgb(27,27,35)] dark:border-2 dark:border-[rgb(49,45,78)] text-[3vw] pl-[8vw] bg-gradient-to-r from-violet-300 to-indigo-200 opacity-0.2 text-zinc-50 w-[75vw] h-[10vw] border-2 border-violet-400 rounded-[25px]"
             />
           </label>
@@ -467,6 +469,9 @@ export default {
   methods: {
     boolean() {
       this.drawerVisible = false;
+    },
+    search() {
+      this.$router.push('/SearchView');
     },
     init(name) {
       this.bs = new BScroll(name, {
