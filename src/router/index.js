@@ -1,23 +1,10 @@
-import HomeView from '../views/HomeView/HomeView.vue';
-const viewMap = {
-  HomeView,
-};
-
-export default {
-  data() {
-    return {
-      visibleView: 'HomeView',
-    };
-  },
-  beforeCreate() {
-    window.onhashchange = () => {
-      this.visibleView = location.hash.replace('#', '');
-    };
-  },
-  // 动态返回一个数据的data
-  computed: {
-    currentComponent() {
-      return viewMap[this.visibleView];
-    },
-  },
-};
+// 1、引入
+import VueRouter from 'vue-router';
+import routes from './routes.js';
+// 2、注册全局
+import Vue from 'vue';
+Vue.use(VueRouter);
+const router = new VueRouter({
+  routes,
+});
+export default router;

@@ -1,25 +1,22 @@
 <template>
   <div>
-    <!-- 内置组件 component:渲染其他组件的组件 它的is属性指向谁就渲染谁-->
-    <component :is="currentComponent"></component>
+    <!-- 声明式导航 -->
+    <!-- <router-link to="/></router-link> -->
+    <router-link :to="{ path: '/IndexView', query: { id: 123 } }"
+      >go tu IndexView</router-link
+    >
+    <router-view />
   </div>
 </template>
 
 <script>
-// 动态返回组件的这些逻辑 全部单独封装为一个js文件
-import router from './router/index';
 export default {
-  // 混合
-  mixins: [router],
-  data() {
-    return {
-      a: 123,
-    };
-  },
   created() {
-    window.vm = this;
+    // setTimeout(() => {
+    //   // 编程式导航
+    //   // this.$router.push('/')
+    // }, 1000);
   },
-  // ...router,
 };
 </script>
 
