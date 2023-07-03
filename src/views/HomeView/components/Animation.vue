@@ -3,12 +3,12 @@
     <transition name="animation">
       <div
         v-if="visible === index + 1"
-        class="w-[40vw] absolute top-[1vw] left-0 mr-[4.5vw] scroll-item z-[5]"
+        class="w-[31vw] absolute top-[1vw] left-0 mr-[4.5vw] scroll-item z-[5]"
       >
         <img
           :src="personalizedtwo.uiElement.image.imageUrl"
           alt=""
-          class="w-[40vw] rounded-[20px]"
+          class="w-[31vw] rounded-[8px]"
         />
 
         <div

@@ -8,7 +8,7 @@
     >
       <img :src="item.iconUrl" alt="" class="red-image w-[15vw]" />
       <p
-        class="text-[3vw] text-center text-[black] dark:text-[rgb(178,179,184)]"
+        class="text-[3vw] text-center text-[rgb(102,112,124)] dark:text-[rgb(178,179,184)]"
       >
         {{ item.name }}
       </p>

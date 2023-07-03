@@ -150,7 +150,7 @@ export default {
     // 排行榜
     const res3 = await fetchPlaylist();
     this.Playlist = res3;
-    console.log(this.Playlist);
+    // console.log(this.Playlist);
   },
   watch: {
     userSearchKeywords: _.debounce(async function (keywords) {

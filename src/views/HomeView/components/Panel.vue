@@ -5,13 +5,13 @@
       <div class="flex justify-between items-center">
         <div class="flex">
           <p
-            class="text-[5vw] font-medium flex text-[black] dark:text-[rgb(234,234,236)]"
+            class="text-[4vw] flex text-[rgb(62,72,92)] font-semibold dark:text-[rgb(234,234,236)]"
           >
             {{ label }}
           </p>
           <Icon
             icon="uiw:right"
-            class="mt-[1.5vw] text-[5vw] text-[black] dark:text-[rgb(234,234,236)]"
+            class="mt-[1.5vw] text-[3vw] ml-[1vw] text-[rgb(62,72,92)] dark:text-[rgb(234,234,236)]"
           />
         </div>
         <Icon
@@ -19,7 +19,7 @@
           width="5vw"
           height="5vw"
           @click.native="drawerVisible = !drawerVisible"
-          class="text-[black] dark:text-[rgb(234,234,236)]"
+          class="text-[rgb(62,72,92)] dark:text-[rgb(234,234,236)]"
         />
       </div>
     </div>

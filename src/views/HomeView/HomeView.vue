@@ -1,61 +1,67 @@
 <!-- eslint-disable vue/no-deprecated-v-bind-sync -->
 <template>
   <div
-    class="h-[100vh]"
     :class="{ dark: darkMode }"
+    class="h-[100vh]"
     :style="{ overflow: drawerVisible ? 'hidden' : 'auto' }"
   >
     <div
-      class="dark:bg-gradient-to-r dark:from-[rgb(28,25,52)] dark:to-[rgb(27,27,35)] bg-gradient-to-r from-violet-100 to-indigo-100 opacity-0.2"
+      class="dark:bg-gradient-to-r dark:from-[rgb(28,25,52)] dark:to-[rgb(27,27,35)] bg-[#F4F4F4]"
     >
-      <div class="w-[100vw] h-[20vw] p-[3vw] flex justify-between items-center">
-        <Icon
-          icon="vaadin:lines"
-          @click.native="drawerVisible = !drawerVisible"
-          width="6vw"
-          height="6vw"
-          class="dark:text-[rgb(234,234,236)] text-[black]"
-        />
-
-        <div class="relative">
-          <label for="">
-            <input
-              type="text"
-              :placeholder="defaultSearch.showKeyword"
-              v-model="userSearchKeywords"
-              @focus="search"
-              class="dark:bg-gradient-to-r dark:from-[rgb(28,25,52)] dark:to-[rgb(27,27,35)] dark:border-2 dark:border-[rgb(49,45,78)] text-[3vw] pl-[8vw] bg-gradient-to-r from-violet-300 to-indigo-200 opacity-0.2 text-zinc-50 w-[75vw] h-[10vw] border-2 border-violet-400 rounded-[25px]"
-            />
-          </label>
+      <div
+        class="bg-gradient-to-b from-[#E6E6FB] to-[#f1f1f1] opacity-0.2 dark:bg-gradient-to-r dark:from-[rgb(28,25,52)] dark:to-[rgb(27,27,35)]"
+      >
+        <div
+          class="w-[100vw] h-[20vw] p-[3vw] flex justify-between items-center"
+        >
           <Icon
-            icon="tabler:search"
-            color="#6f778f"
-            class="absolute left-[3.68vw] top-[3vw]"
-            width="4.5vw"
-            @click.native="searchHandler"
+            icon="vaadin:lines"
+            @click.native="drawerVisible = !drawerVisible"
+            width="6vw"
+            height="6vw"
+            class="dark:text-[rgb(234,234,236)] text-[black]"
           />
+
+          <div class="relative">
+            <label for="">
+              <input
+                type="text"
+                :placeholder="defaultSearch.showKeyword"
+                v-model="userSearchKeywords"
+                @focus="search"
+                class="dark:bg-gradient-to-r dark:from-[rgb(28,25,52)] dark:to-[rgb(27,27,35)] dark:border-2 dark:border-[rgb(49,45,78)] text-[3vw] pl-[8vw] bg-gradient-to-r from-[#d9ddfd] to-[#f3d9ef] opacity-0.2 text-[#8189A1] w-[75vw] h-[10vw] border-2 border-[#CCCEF7] rounded-[25px]"
+              />
+            </label>
+            <Icon
+              icon="tabler:search"
+              color="#6f778f"
+              class="absolute left-[3.68vw] top-[3vw]"
+              width="4.5vw"
+              @click.native="searchHandler"
+            />
+            <Icon
+              icon="tabler:scan"
+              color="#78758b"
+              class="absolute right-[3.68vw] top-[3vw]"
+              width="4.5vw"
+            />
+          </div>
+
           <Icon
-            icon="tabler:scan"
-            color="#78758b"
-            class="absolute right-[3.68vw] top-[3vw]"
-            width="4.5vw"
+            icon="vaadin:mute"
+            width="6vw"
+            height="6vw"
+            class="dark:text-[rgb(234,234,236)] text-[black]"
           />
         </div>
-
-        <Icon
-          icon="vaadin:mute"
-          width="6vw"
-          height="6vw"
-          class="dark:text-[rgb(234,234,236)] text-[black]"
-        />
       </div>
       <!-- 轮播图 -->
       <section
-        class="w-[100%] h-[36vw] rounded-2xl flex items-center overflow-hidden"
+        class="w-[90] h-[36vw] flex items-center overflow-hidden justify-center"
       >
         <van-swipe
           :autoplay="2000"
-          class="w-[100%] h-[100%] overflow-hidden relative"
+          class="w-[90%] h-[100%] overflow-hidden relative rounded-[10px]"
         >
           <van-swipe-item v-for="item in menu" :key="item.id">
             <img :src="item.pic" class="w-[100%] h-[100%]" />
@@ -74,11 +80,11 @@
         ></RecommondMenu>
       </div>
       <!-- 推荐歌单 -->
-      <Panel label="推荐歌单" :length="6" :width="40" :margin="4.5">
+      <Panel label="推荐歌单" :length="6" :width="31" :margin="4.5">
         <template #header>
-          <div class="relative">
+          <div class="relative w-[31vw] mr-[5vw]">
             <div
-              class="w-[40vw] h-[40vw] mr-[4.5vw] pt-[2vw] overflow-hidden relative"
+              class="w-[31vw] h-[35vw] ml-[0vw] mr-[4.5vw] pt-[3vw] overflow-hidden relative"
             >
               <Animation
                 v-for="(item, index) in personalizedtwo"
@@ -89,11 +95,11 @@
                 v-bind:text.sync="text"
               ></Animation>
               <div
-                class="w-[26vw] h-[31vw] bg-[#f8f7f7] absolute top-[0vw] left-1/2 -translate-x-1/2 rounded-[8px] z-[0]"
+                class="w-[26vw] h-[31vw] bg-[#ccc] absolute top-[0vw] left-1/2 -translate-x-1/2 rounded-[8px] z-[0]"
               ></div>
             </div>
             <p
-              class="text-[3.5vw] absolute top-[40vw] dark:text-[rgb(234,234,236)]"
+              class="text-[2.78vw] ml-[2vw] absolute top-[35vw] dark:text-[rgb(234,234,236)]"
             >
               {{
                 text === null
@@ -106,44 +112,44 @@
             :personalized="item"
             v-for="item in personalized"
             :key="item.id"
-            class="w-[40vw] h-[55vw] pt-[1vw] mr-[4.5vw] scroll-item relative"
+            class="w-[31vw] h-[50vw] pt-[1vw] mr-[3vw] scroll-item relative"
           ></RecommendedSongList>
         </template>
       </Panel>
 
       <!-- 新歌速递 -->
-      <Panel label="新歌速递" :length="32" :width="85" :margin="10">
+      <Panel label="新歌新碟\数字专辑" :length="32" :width="85" :margin="10">
         <template #header>
           <NewSongExpress
             :item="item"
             v-for="item in song"
             :key="item.song"
-            class="w-[85vw] scroll-item"
+            class="w-[82vw] scroll-item mb-[2.5vw]"
           ></NewSongExpress>
         </template>
       </Panel>
 
       <!-- 排行榜 -->
-      <Panel label="排行榜" :length="6" :width="90" :margin="10">
+      <Panel label="排行榜" :length="6" :width="90" :margin="2">
         <template #header>
           <TheCharts
             v-for="item in blocks"
             :item="item"
             :key="item.id"
-            class="p-[2vw] mr-[10vw] overflow-hidden w-[90vw] mb-[2.5vw] ml-0 h-[60vw] bg-white dark:bg-[rgb(37,37,45)] scroll-item rounded-[15px]"
+            class="p-[2vw] mr-[2vw] overflow-hidden w-[90vw] mb-[0vw] ml-0 h-[68vw] bg-white dark:bg-[rgb(37,37,45)] scroll-item rounded-[15px]"
             ref="song"
           ></TheCharts>
         </template>
       </Panel>
 
       <!-- 热门话题 -->
-      <Panel label="热门话题" :length="5" :width="90" :margin="5">
+      <Panel label="热门话题" :length="5" :width="65" :margin="2.8">
         <template #header>
           <HotTopic
             v-for="item in hot"
             :key="item.id"
             :item="item"
-            class="scroll-item p-[5vw] w-[90vw] mr-[5vw] mt-[3vw] mb-[5vw] bg-slate-500 h-[35vw] rounded-[15px]"
+            class="scroll-item py-[4vw] px-[3vw] w-[65vw] mr-[2.8vw] mt-[3vw] mb-[5vw] bg-slate-500 h-[30vw] rounded-[10px]"
           ></HotTopic>
         </template>
       </Panel>
@@ -151,11 +157,11 @@
       <Panel label="音乐日历">
         <template #header>
           <div
-            class="w-[90vw] ml-0 m-[3vw] bg-white rounded-[15px] p-[5vw] pb-[2vw] dark:bg-[rgb(37,37,45)]"
+            class="w-[90vw] ml-0 m-[3vw] mt-[0vw] bg-white rounded-[15px] p-[5vw] pb-[2vw] dark:bg-[rgb(37,37,45)]"
           >
             <MusicCalendar
               v-for="(item, index) in calendar"
-              class="w-[80vw] h-[15vw] flex justify-between mb-[7vw] mt-[2vw]"
+              class="w-[80vw] h-[15vw] flex justify-between mb-[10vw] mt-[2vw]"
               :key="index.id"
               :item="item"
               :index="index"
@@ -501,6 +507,7 @@ export default {
       console.log(res);
     },
   },
+
   async created() {
     // 搜索框
     const res = await fetchSearchDefault();

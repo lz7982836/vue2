@@ -5,18 +5,18 @@
     <!-- <router-link :to="{ path: '/IndexView', query: { id: 123 } }"
       >go tu IndexView</router-link
     > -->
-    <router-view />
+    <router-view> </router-view>
   </div>
 </template>
 
 <script>
 export default {
-  created() {
-    // setTimeout(() => {
-    //   // 编程式导航
-    //   // this.$router.push('/')
-    // }, 1000);
+  components: {},
+  data() {
+    return {};
   },
+  create() {},
+  methods: {},
 };
 </script>
 

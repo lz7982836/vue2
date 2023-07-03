@@ -6,19 +6,17 @@
         {{ item.user.nickname }}
       </h1>
     </div>
-    <p class="text-[#ccc] text-[3vw] dark:text-[rgb(144,144,152)]">
+    <p class="text-[#ccc] text-[2.6vw] dark:text-[rgb(144,144,152)]">
       {{ item.tailMark?.circle?.member }}热度
     </p>
     <div class="flex justify-between">
-      <p
-        class="text-white leading-[25vw] text-[3vw] dark:text-[rgb(234,234,236)]"
-      >
+      <p class="text-white text-[2.6vw] dark:text-[rgb(234,234,236)]">
         {{ item.tailMark?.markTitle }}
       </p>
       <img
         :src="item.tailMark?.circle?.imageUrl"
         alt=""
-        class="w-[15vw] h-[15vw]"
+        class="w-[13.75vw] h-[13.75vw] rounded-[12px]"
       />
     </div>
   </div>

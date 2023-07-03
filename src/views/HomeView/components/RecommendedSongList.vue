@@ -7,9 +7,9 @@
       <img
         :src="personalized.uiElement.image.imageUrl"
         alt=""
-        class="w-[40vw] rounded-[20px]"
+        class="w-[31vw] rounded-[8px]"
       />
-      <p class="text-[3.5vw] dark:text-[rgb(234,234,236)]">
+      <p class="text-[2.78vw] dark:text-[rgb(234,234,236)] mt-[2vw]">
         {{ personalized.uiElement.mainTitle.title }}
       </p>
       <div

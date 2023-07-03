@@ -8,6 +8,7 @@ import router from './router';
 // eslint-disable-next-line vue/multi-word-component-names
 Vue.component('Icon', Icon);
 Vue.use(Drawer);
+
 // Vue.component('Drawer', Drawer);
 
 const vm = new Vue({

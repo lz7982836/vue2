@@ -11,7 +11,11 @@
           {{ item.tag }}
         </span>
       </h1>
-      <p class="text-[3.5vw] dark:text-[rgb(234,234,236)]">{{ item.title }}</p>
+      <p
+        class="text-[3.68vw] dark:text-[rgb(234,234,236)] mt-[2vw] text-[#3E4558]"
+      >
+        {{ item.title }}
+      </p>
     </div>
     <img :src="item.imgUrl" alt="" class="w-[15vw] h-[15vw]" />
   </div>
