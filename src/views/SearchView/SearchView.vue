@@ -31,7 +31,7 @@
         搜索
       </div>
     </div>
-    <div>
+    <div v-if="userSearchKeywords == ''">
       <!-- 导航栏 -->
       <div class="flex justify-around mt-[3vw]">
         <div
