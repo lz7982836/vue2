@@ -57,14 +57,14 @@
       </div>
       <!-- 轮播图 -->
       <section
-        class="w-[90] h-[36vw] flex items-center overflow-hidden justify-center"
+        class="h-[36vw] flex items-center overflow-hidden justify-center"
       >
         <van-swipe
           :autoplay="2000"
           class="w-[90%] h-[100%] overflow-hidden relative rounded-[10px]"
         >
           <van-swipe-item v-for="item in menu" :key="item.id">
-            <img :src="item.pic" class="w-[100%] h-[100%]" />
+            <img :src="item.pic" class="w-[100%] h-[36vw]" />
           </van-swipe-item>
         </van-swipe>
         <van-pagination :total-items="6" :items-per-page="1" />
@@ -232,12 +232,27 @@
                   class="w-[7vw] h-[7vw] rounded-[50%] mr-[2vw] bg-[#f4f4f1] flex items-center justify-center overflow-hidden"
                 >
                   <Icon
+                    v-if="accountcookie?.data?.profile == null"
                     icon="gridicons:user"
                     class="w-[7vw] h-[7vw] text-[#f9dada] dark:text-[white]"
                   />
+                  <img
+                    v-else
+                    :src="accountcookie?.data?.profile?.avatarUrl"
+                    alt=""
+                    class="w-[7vw] h-[7vw]"
+                  />
                 </div>
-                <span class="text-[3.5vw] text-[#000] dark:text-[white]"
+                <span
+                  @click="$router.push('/Login')"
+                  v-if="accountcookie?.data?.profile == null"
+                  class="text-[3.5vw] text-[#000] dark:text-[white]"
                   >立即登录</span
+                >
+                <span
+                  v-else
+                  class="text-[3.5vw] text-[#000] dark:text-[white]"
+                  >{{ accountcookie?.data?.profile?.nickname }}</span
                 >
                 <Icon
                   icon="mingcute:right-line"
@@ -290,12 +305,19 @@
               v-for="item in DrawerData"
               :key="item"
               :item="item"
-              :checks.sync="darkMode"
             />
             <div
+              v-if="accountcookie?.data?.profile == null"
               class="dark:bg-[#2c2c2c] h-[12vw] px-[3.6vw] bg-[#fff] w-[76vw] mt-[4vw] rounded-[15px] mx-auto leading-[12vw] text-center text-[3.6vw] text-[#ef4239]"
             >
               关闭云音乐
+            </div>
+            <div
+              v-else
+              @click="remove"
+              class="dark:bg-[#2c2c2c] h-[12vw] px-[3.6vw] bg-[#fff] w-[76vw] mt-[4vw] rounded-[15px] mx-auto leading-[12vw] text-center text-[3.6vw] text-[#ef4239]"
+            >
+              退出登录
             </div>
           </div>
         </div>
@@ -317,7 +339,8 @@ import MusicCalendar from './components/MusicCalendar.vue';
 import LeftSidebarModuleView from './components/LeftSidebarModuleView.vue';
 // import _ from 'lodash';
 import ScrollBar from '@better-scroll/scroll-bar';
-
+import store from 'storejs';
+import Dialog from '../../components/Dialog';
 BScroll.use(ScrollBar);
 import {
   fetchSearchDefault,
@@ -330,6 +353,8 @@ import {
   fetchblocks,
   fetchhot,
   fetchcalendar,
+  getUserAccount,
+  getUserDetail,
 } from '../../request/index';
 
 export default {
@@ -459,7 +484,8 @@ export default {
           ],
         },
       ],
-      darkMode: false,
+      accountcookie: [],
+      detailcookie: [],
     };
   },
   updated() {
@@ -476,6 +502,7 @@ export default {
     boolean() {
       this.drawerVisible = false;
     },
+
     search() {
       this.$router.push('/SearchView');
     },
@@ -500,6 +527,21 @@ export default {
         scrollbar: true,
       });
     },
+
+    remove() {
+      // console.log(66);
+      Dialog({ message: '确定退出当前账号吗？' })
+        .then(() => {
+          console.log('点击了确定');
+          store.remove('__m__cookie');
+          store.remove('__m__User'); //删除用户信息
+          store.remove('__m__UserData'); //删除账号信息
+          this.$router.push('/Login');
+        })
+        .catch(() => {
+          console.log('点击了取消');
+        });
+    },
     async searchHandler() {
       const res = await fetchSearchResult({
         keywords: this.userSearchKeywords || this.defaultSearch.showKeyword,
@@ -509,6 +551,12 @@ export default {
   },
 
   async created() {
+    const account = await getUserAccount();
+    console.log('cookie', account);
+    this.accountcookie = account;
+    const detail = await getUserDetail(account?.data?.profile?.userId);
+    this.detailcookie = detail;
+    console.log(detail);
     // 搜索框
     const res = await fetchSearchDefault();
     this.defaultSearch = res.data.data;
@@ -524,6 +572,7 @@ export default {
     // 推荐歌单
     const res3 = await fetchpersonalized();
     this.personalized = res3.data.data.blocks[1].creatives.slice(1, 6);
+    // console.log(this.personalized);
 
     const restwo = await fetchpersonalized();
     this.personalizedtwo = restwo.data.data.blocks[1].creatives.slice(

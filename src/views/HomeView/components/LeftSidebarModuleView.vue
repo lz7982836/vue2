@@ -43,7 +43,7 @@
                 type="checkbox"
                 id="toggle"
                 :checked="!checked"
-                @click="fn"
+                @click="increase"
               />
               <label for="toggle"></label>
             </div>
@@ -55,19 +55,17 @@
 </template>
 
 <script>
+import store from '../../../store';
 export default {
   props: ['item', 'checks'],
+
   data() {
     return {
       checked: false,
     };
   },
   methods: {
-    fn() {
-      this.checked = !this.checked;
-      this.$emit('update:checks', this.checked);
-      console.log(this.checked);
-    },
+    increase: store.mutations.increase,
   },
 };
 </script>

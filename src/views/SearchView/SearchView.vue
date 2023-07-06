@@ -24,10 +24,12 @@
           color="#6f778f"
           class="absolute left-[3.68vw] top-[3vw] text-[#000] dark:text-[#e9e9e9]"
           width="4.5vw"
-          @click.native="searchHandler"
         />
       </div>
-      <div class="font-semibold text-[4vw] dark:text-[#e9e9e9] text-[#283349]">
+      <div
+        class="font-semibold text-[4vw] dark:text-[#e9e9e9] text-[#283349]"
+        @click="searchHandler"
+      >
         搜索
       </div>
     </div>
@@ -62,7 +64,7 @@
             @click.native="rotateItems"
           />
         </div>
-        <div class="flex px-[4vw]">
+        <div class="flex px-[4vw] flex-wrap">
           <div
             v-for="item in displayedItems"
             :key="item.id"
@@ -74,6 +76,29 @@
       </div>
       <!-- 排行榜 -->
       <MusicCharts :Playlist="Playlist"></MusicCharts>
+    </div>
+    <div
+      class="mt-[3vw] px-[3vw] h-[88vh] dark:bg-[rgb(26,28,35)]"
+      v-else-if="userSearchKeywords != ''"
+    >
+      <div
+        class="flex h-[12vw] items-center border-b dark:border-[rgb(38,40,47)]"
+        v-for="item in searchtwo"
+        :key="item.id"
+      >
+        <Icon
+          icon="tabler:search"
+          color="#6f778f"
+          class="text-[#283349] dark:text-[rgb(151,152,155)]"
+          width="4.5vw"
+        />
+        <p class="ml-[2vw] text-[3vw] text-[#ccc] dark:text-[rgb(152,152,155)]">
+          {{ item.name == userSearchKeywords ? item.name : '' }}
+          <span class="text-[#283349] dark:text-[#e9e9e9]">{{
+            item.name.replace(userSearchKeywords, '')
+          }}</span>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -119,6 +144,7 @@ export default {
       like: null,
       displayedItems: [],
       Playlist: [],
+      searchtwo: [],
     };
   },
   methods: {
@@ -157,7 +183,9 @@ export default {
       console.log(keywords);
       const res = await fetchSearchResult({ keywords: keywords });
       console.log(res);
-    }, 1000),
+      this.searchtwo = res.data.result?.songs.slice(0, 10);
+      // console.log(this.searchtwo);
+    }, 300),
   },
 };
 </script>

@@ -4,7 +4,7 @@
       <van-swipe-item
         v-for="item in Playlist.slice(0, 10)"
         :key="item.id"
-        class="w-[61.172vw] px-[4vw] bg-[#fff] dark:bg-[#31333a] rounded-[2vw] mr-[2.344vw]"
+        class="w-[65vw] px-[4vw] bg-[#fff] dark:bg-[#31333a] rounded-[2vw] mr-[2.344vw]"
       >
         <!-- 标题开始 -->
         <div

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="fn">
     <div
       class="w-[26vw] h-[31vw] bg-[#ddd] absolute top-[0vw] left-1/2 -translate-x-1/2 rounded-[8px] z-[0]"
     ></div>
@@ -40,7 +40,11 @@ export default {
     return {};
   },
 
-  methods: {},
+  methods: {
+    fn() {
+      this.$router.push(`/SongDetailsView:id=${this.personalized.creativeId}`);
+    },
+  },
   props: ['personalized'],
 };
 </script>

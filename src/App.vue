@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ dark: darkMode }">
     <!-- 声明式导航 -->
     <!-- <router-link to="/></router-link> -->
     <!-- <router-link :to="{ path: '/IndexView', query: { id: 123 } }"
@@ -10,13 +10,19 @@
 </template>
 
 <script>
+import store from './store';
 export default {
-  components: {},
-  data() {
-    return {};
+  computed: {
+    darkMode() {
+      return store.state.darkMode;
+    },
   },
-  create() {},
-  methods: {},
+  data() {
+    return {
+      // darkMode: false,
+    };
+  },
+  async created() {},
 };
 </script>
 

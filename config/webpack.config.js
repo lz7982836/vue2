@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
 const { VueLoaderPlugin } = require('vue-loader');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   // 入口文件
@@ -36,6 +37,9 @@ module.exports = {
     }),
     new WebpackBar(),
     new VueLoaderPlugin(),
+    new CopyPlugin({
+      patterns: [{ from: './src/static', to: './static' }],
+    }),
   ],
 
   // 显示最小限度的统计信息
