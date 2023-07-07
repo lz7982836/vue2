@@ -42,7 +42,7 @@
               <input
                 type="checkbox"
                 id="toggle"
-                :checked="!checked"
+                :checked="!darkMode"
                 @click="increase"
               />
               <label for="toggle"></label>
@@ -56,12 +56,17 @@
 
 <script>
 import store from '../../../store';
+// import store from 'storejs';
 export default {
   props: ['item', 'checks'],
-
+  computed: {
+    darkMode() {
+      return store.state.darkMode;
+    },
+  },
   data() {
     return {
-      checked: false,
+      // checked: false,
     };
   },
   methods: {

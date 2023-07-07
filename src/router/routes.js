@@ -7,7 +7,7 @@ import SongDetailsView from '../views/SongDetailsView/SongDetailsView.vue';
 export default [
   {
     path: '/',
-    redirect: '/HomeView',
+    redirect: '/Rest',
   },
   {
     path: '/HomeView',
@@ -42,5 +42,10 @@ export default [
     path: '/Login',
     // 懒加载组件
     component: () => import('../views/Login.vue'),
+  },
+  {
+    path: '/Rest',
+    // 懒加载组件
+    component: () => import(/* webpackChunkName:'rest' */ '../views/Rest.vue'),
   },
 ];
