@@ -24,7 +24,7 @@
 export default {
   props: {
     item: {
-      type: Array,
+      type: Object,
     },
     index: {
       type: Number,

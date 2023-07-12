@@ -1,7 +1,6 @@
 <!-- eslint-disable vue/no-deprecated-v-bind-sync -->
 <template>
   <div
-    :class="{ dark: darkMode }"
     class="h-[100vh]"
     :style="{ overflow: drawerVisible ? 'hidden' : 'auto' }"
   >
@@ -67,7 +66,7 @@
             <img :src="item.pic" class="w-[100%] h-[36vw]" />
           </van-swipe-item>
         </van-swipe>
-        <van-pagination :total-items="6" :items-per-page="1" />
+        <!-- <van-pagination :total-items="6" :items-per-page="1" /> -->
       </section>
       <!-- 每日推荐 -->
       <div
@@ -251,6 +250,7 @@
                 >
                 <span
                   v-else
+                  @click="Personal"
                   class="text-[3.5vw] text-[#000] dark:text-[white]"
                   >{{ accountcookie?.data?.profile?.nickname }}</span
                 >
@@ -302,8 +302,8 @@
               </div>
             </div>
             <LeftSidebarModuleView
-              v-for="item in DrawerData"
-              :key="item"
+              v-for="(item, indexs) in DrawerData"
+              :key="indexs.id"
               :item="item"
             />
             <div
@@ -322,12 +322,18 @@
           </div>
         </div>
       </Drawer>
+
+      <!-- 播放 -->
+      <!-- <VideoView></VideoView> -->
     </div>
   </div>
 </template>
 <script>
 import BScroll from '@better-scroll/core';
 import { Swipe, SwipeItem } from 'vant';
+// import Vue from 'vue';
+// import { Pagination } from 'vant';
+// Vue.use(Pagination);
 import RecommondMenu from './components/RecommondMenu.vue';
 import NewSongExpress from './components/NewSongExpress.vue';
 import TheCharts from './components/TheCharts.vue';
@@ -390,6 +396,7 @@ export default {
       drawerVisible: false,
       personalizedtwo: [],
       text: null,
+      noscroll: null,
       DrawerData: [
         {
           title: false,
@@ -502,7 +509,9 @@ export default {
     boolean() {
       this.drawerVisible = false;
     },
-
+    Personal() {
+      this.$router.push('/PersonalHomepageView');
+    },
     search() {
       this.$router.push('/SearchView');
     },
@@ -552,11 +561,11 @@ export default {
 
   async created() {
     const account = await getUserAccount();
-    console.log('cookie', account);
+    // console.log('cookie', account);
     this.accountcookie = account;
     const detail = await getUserDetail(account?.data?.profile?.userId);
     this.detailcookie = detail;
-    console.log(detail);
+    // console.log(detail);
     // 搜索框
     const res = await fetchSearchDefault();
     this.defaultSearch = res.data.data;

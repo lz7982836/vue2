@@ -12,7 +12,7 @@
       <div
         class="flex items-center justify-between h-[12vw] px-[3.6vw]"
         v-for="item1 in item.data"
-        :key="item1"
+        :key="item1.id"
       >
         <div class="flex items-center">
           <Icon

@@ -171,3 +171,37 @@ export const getUserAccount = () => http.get('/user/account');
 
 export const getUserDetail = (uid) =>
   http.get('/user/detail', { params: { uid } });
+
+export const fetchUserPlaylist = (uid) =>
+  http.get('/user/playlist', { params: { uid } });
+
+export const fetchUserHistory = (uid) =>
+  http.get('/user/comment/history', { params: { uid } });
+
+export const fetchSongDetail = (ids) =>
+  http.get('/song/detail', { params: { ids } });
+
+export const getMP3 = (id) =>
+  http.get('/song/url/v1', { params: { id, level: 'standard' } });
+
+export const getTrackDetail = (id) =>
+  http.get('/song/detail', { params: { ids: id } });
+
+//昵称
+export const fetchUserUpdata = (nickname) =>
+  http.get('/user/update', { params: { nickname } });
+//生日
+export const fetchUserUpdata2 = (birthday) =>
+  http.get('/user/update', { params: { birthday } });
+//性别
+export const fetchUserUpdata3 = (gender) =>
+  http.get('/user/update', { params: { gender } });
+//地区
+export const fetchUserUpdata4 = (province, city) =>
+  http.get('/user/update', { params: { province, city } });
+export const featNicknameCheck = (nickname) =>
+  http.get('/nickname/check', { params: { nickname } });
+
+//Mv
+export const Mv = (area) =>
+  http.get('/top/mv', { params: { limit: 50, area } });

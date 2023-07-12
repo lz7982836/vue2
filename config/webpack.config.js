@@ -18,8 +18,14 @@ module.exports = {
     clean: true,
   },
 
-  externals: {
-    vue: 'Vue',
+  // externals: {
+  //   vue: 'Vue',
+  // },
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.esm.js',
+      '@': path.resolve(__dirname, '../src'),
+    },
   },
 
   // 插件设置
@@ -27,7 +33,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html', // 设置html模板
       cdn: {
-        script: ['https://cdn.jsdelivr.net/npm/vue@2'],
+        script: [],
         // 空数组代表不需要引入样式文件
         style: [],
       },
@@ -77,6 +83,13 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
       // 解析css文件
       {
         test: /\.css$/i,

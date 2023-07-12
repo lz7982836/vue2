@@ -21,7 +21,8 @@
         <div class="flex relative w-[100%] h-[14.5vw]">
           <img
             :src="
-              item.resources[indexs].resourceExtInfo?.songData.album.blurPicUrl
+              item.resources[indexs]?.resourceExtInfo?.songData?.album
+                .blurPicUrl
             "
             class="w-[14.5vw] h-[14.5vw] rounded-[10px]"
             alt=""
@@ -36,12 +37,13 @@
             <p
               class="text-[3.5vw] font-normal text-[rgb(63,73,93)] w-[40vw] text-ellipsis overflow-hidden whitespace-nowrap dark:text-[rgb(234,234,236)]"
             >
-              {{ item.resources[indexs].resourceExtInfo?.songData.name }}
+              {{ item.resources[indexs]?.resourceExtInfo?.songData?.name }}
             </p>
             <p
+              v-if="item && item.resources[indexs]?.resourceExtInfo?.artists"
               class="text-[2.5vw] text-[rgb(126,133,146)] dark:text-[rgb(144,144,152)]"
             >
-              {{ item.resources[indexs].resourceExtInfo?.artists[0].name }}
+              {{ item.resources[indexs]?.resourceExtInfo?.artists[0]?.name }}
               <span
                 class="absolute w-[8vw] h-[5vw] right-[3vw] text-[3vw] top-[2vw]"
                 ref="sps"

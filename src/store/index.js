@@ -11,6 +11,9 @@ const mutations = {
     state.darkMode = !state.darkMode;
     store.set('darkMode', state.darkMode);
   },
+  inmusic() {
+    store.set('cookie_music', state.music);
+  },
 };
 
 export default { state, mutations };

@@ -7,7 +7,7 @@ import SongDetailsView from '../views/SongDetailsView/SongDetailsView.vue';
 export default [
   {
     path: '/',
-    redirect: '/Rest',
+    redirect: '/HomeView',
   },
   {
     path: '/HomeView',
@@ -47,5 +47,38 @@ export default [
     path: '/Rest',
     // 懒加载组件
     component: () => import(/* webpackChunkName:'rest' */ '../views/Rest.vue'),
+  },
+  {
+    path: '/PersonalHomepageView',
+    // 懒加载组件
+    component: () =>
+      import(
+        /* webpackChunkName:'rest' */ '../views/PersonalHomepageView/PersonalHomepageView.jsx'
+      ),
+  },
+  {
+    path: '/InformationView',
+    // 懒加载组件
+    component: () => import('../views/InformationView/InformationView.jsx'),
+  },
+  {
+    path: '/0708',
+    // 懒加载组件
+    component: () => import('../views/Feat-0708.vue'),
+  },
+  {
+    path: '/Player',
+    // 懒加载组件
+    component: () => import('../components/Player/Player.vue'),
+  },
+  {
+    path: '/PlayerHome',
+    // 懒加载组件
+    component: () => import('../views/PlayerHome/PlayerHome.vue'),
+  },
+  {
+    path: '/MVView',
+    // 懒加载组件
+    component: () => import('../views/MVView/MVView.jsx'),
   },
 ];

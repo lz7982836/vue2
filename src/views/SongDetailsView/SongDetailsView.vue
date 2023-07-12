@@ -289,9 +289,16 @@
       <!-- 播放全部 -->
       <div class="flex justify-between px-[3.68vw] pt-[3.58vw] pb-[4vw] play">
         <div class="flex items-center">
-          <Icon icon="carbon:play-filled" color="red" class="text-[5vw]" />
+          <Icon
+            icon="carbon:play-filled"
+            @click.native="playAll"
+            color="red"
+            class="text-[5vw]"
+          />
           <h1 class="text-[3.5vw] ml-[4vw]">
-            播放全部<span class="text-[#ccc] text-[2vw] ml-[2vw]">(257)</span>
+            播放全部<span class="text-[#ccc] text-[2vw] ml-[2vw]"
+              >({{ this.data.length }})</span
+            >
           </h1>
         </div>
         <div class="flex items-center">
@@ -308,13 +315,31 @@
         class="flex items-center pb-[6vw] px-[5vw]"
         v-for="(item, index) in data"
         :key="item.id"
+        @click="playSingle(item.id)"
       >
-        <div class="w-[11vw] text-[#bfbfbf] text-[5vw] font-medium">
-          {{ index + 1 }}
+        <!-- 排号 -->
+        <div class="w-[11vw] relative text-[#bfbfbf] text-[5vw] font-medium">
+          <p v-if="!(item.id == $player._currentTrack.id)">{{ index + 1 }}</p>
+          <img
+            src="/static/wave.gif"
+            class="red-image w-[2vw] h-[2vw] absolute top-[50%] translate-y-[-50%]"
+            v-if="item.id == $player._currentTrack.id"
+            alt=""
+          />
         </div>
+        <!-- 播放音浪 -->
+        <!-- <div class="w-[11vw]">
+          <img
+            src="/static/wave.gif"
+            class="red-image w-[2vw] h-[2vw]"
+            v-if="item.id == $player._currentTrack.id"
+            alt=""
+          />
+        </div> -->
         <div class="font-medium text-[3.6vw] flex-1 single-line">
           <div
-            class="w-[60vw] text-[3.4vw] text-ellipsis overflow-hidden whitespace-nowrap"
+            :class="item.id == $player._currentTrack.id ? 'text-[#D15B57]' : ''"
+            class="w-[60vw] text-[4vw] text-ellipsis overflow-hidden whitespace-nowrap"
           >
             <span>{{ item.name }}</span>
             <span class="text-[#949797]" v-if="item && item?.tns"
@@ -324,6 +349,13 @@
           <div
             class="w-[60vw] text-[3.4vw] text-ellipsis overflow-hidden whitespace-nowrap"
           >
+            <span
+              v-if="item.fee == 1"
+              data-v-034931a5=""
+              class="w-[10vw] rounded-[5px] border-[1px] border-[red] font-[600] text-[2vw] text-[red] text-center leading-[6vw] scale-50 ml-[0] mr-[1vw]"
+              >vip</span
+            >
+
             <span class="text-[#808080] text-[2.6vw]"
               >{{ item.ar[0].name }} </span
             ><span class="text-[#808080] text-[2.6vw] ml-[1vw]"
@@ -348,7 +380,7 @@
 
 <script>
 import BScroll from '@better-scroll/core';
-
+import store from 'storejs';
 import RecommendedSongList from '../HomeView/components/RecommendedSongList.vue';
 import {
   fetchPlaylistDetailAll,
@@ -391,6 +423,29 @@ export default {
         click: true,
       });
     },
+    playSingle(id) {
+      console.log(id);
+      store.set('cookie_music_id', id);
+      this.$player.replacePlaylist(
+        this.data.map((data) => data.id),
+        '',
+        '',
+        id
+      );
+      store.set('cookie_music', this.data);
+      this.$router.push('/PlayerHome');
+    },
+    playAll() {
+      // this.data
+      this.$router.push('/PlayerHome');
+      this.$player.replacePlaylist(
+        this.data.map((data) => data.id),
+        '',
+        ''
+      );
+      store.set('cookie_music', this.data);
+      // console.log(666, this.$player);
+    },
     // 改变标题文本
     handleScroll() {
       const scrollPosition =
@@ -424,6 +479,7 @@ export default {
       this.$route.params?.id?.replace(':id=', '')
     );
     this.data = res.data.songs;
+    // console.log(this.data);
     const res2 = await fetchPlaylistDetail(
       this.$route.params?.id?.replace(':id=', '')
     );
@@ -434,7 +490,7 @@ export default {
       this.$route.params?.id?.replace(':id=', '')
     );
     this.related = res3.data.playlists;
-    console.log(this.related);
+    // console.log(this.related);
   },
 };
 </script>
@@ -443,7 +499,7 @@ export default {
 .play {
   position: sticky;
   top: 14vw;
-  z-index: 999;
+  z-index: 15;
   left: 0;
   background-color: white;
 }
