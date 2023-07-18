@@ -28,8 +28,9 @@
         </div>
         <Icon icon="carbon:share" class="text-[6vw] text-[#fff]" />
       </div>
+      <!-- 唱片开始 -->
 
-      <div class="relative top-[0] w-[100vw] h-[120vw]">
+      <div v-if="lyricsSwitching" class="relative top-[0] w-[100vw] h-[120vw]">
         <div
           ref="zhen"
           class="absolute top-[10%] left-[50%] translate-x-[-50%] z-[10] rotated w-[40vw] h-[50vw]"
@@ -47,6 +48,7 @@
         </div>
         <!-- 唱片-->
         <div
+          @click="lyricsSwitching = !lyricsSwitching"
           class="w-[80vw] h-[80vw] absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-45%] z-[5]"
         >
           <img src="/static/cp.png" alt="" class="w-[80vw] h-[80vw]" />
@@ -58,7 +60,30 @@
           />
         </div>
       </div>
-
+      <!-- 歌词开始 -->
+      <div
+        v-else
+        class="z-[20] w-[100vw] h-[120vw] flex items-center flex-wrap px-[6vw] justify-center overflow-hidden relative internalShadow"
+        @click="lyricsSwitching = !lyricsSwitching"
+      >
+        <div
+          class="transition-all duration-1000 absolute top-0"
+          :style="{ top: -$player.lineHieght + 'vw' }"
+        >
+          <div
+            v-for="(line, index) in $player.lyricLines"
+            :key="index"
+            :style="{
+              color:
+                index === $player.lineIndex ? 'red' : 'hsla(0,0%,88.2%,.8)',
+            }"
+            class="px-[4vw] text-[hsla(0,0%,88.2%,.8)] h-[12vw] line-clamp-2 w-[100%] flex justify-center text-center"
+          >
+            {{ line.txt }}
+          </div>
+        </div>
+      </div>
+      <!-- 歌词结束 -->
       <div class="w-[100vw] flex justify-evenly items-center z-[5]">
         <div @click="love = !love">
           <Icon
@@ -108,7 +133,17 @@
           <Icon icon="icon-park-outline:loop-once" v-if="false" />
           <span v-if="false"></span>
         </div>
-        <Icon icon="ps:random" v-if="true" class="text-[#fff]" />
+        <!-- <Icon
+              icon="icon-park-outline:loop-once"
+              :horizontalFlip="true"
+              class="text-[5vw] text-[#B1B1B1]"
+            /> -->
+        <Icon
+          @click.native="$player.boolea = !$player.boolea"
+          :icon="$player.boolea ? 'fad:repeat' : 'fad:repeat-one'"
+          v-if="true"
+          class="text-[#fff] text-[8vw]"
+        />
         <!--上一曲-->
         <Icon
           icon="fluent:previous-16-filled"
@@ -149,17 +184,25 @@
     >
       <div class="playmusic py-[6vw]">
         <h1 class="text-[4vw] font-extrabold">
-          当前播放 <span class="text-[2vw] text-[#929293]">(26)</span>
+          当前播放
+          <span class="text-[2vw] text-[#929293]">({{ music.length }})</span>
         </h1>
         <div class="flex justify-between mt-[6.6vw] items-center">
           <div class="flex">
             <!-- 列表循环图标 -->
             <Icon
-              icon="arcticons:loopboard"
-              :horizontalFlip="true"
-              class="text-[5vw] text-[#B1B1B1]"
+              @click.native="$player.boolea = !$player.boolea"
+              :icon="$player.boolea ? 'fad:repeat' : 'fad:repeat-one'"
+              v-if="true"
+              class="text-[#ccc] text-[8vw]"
             />
-            <h1 class="ml-[1.5vw] text-[3.4vw] font-medium">列表循环</h1>
+            <h1
+              class="ml-[1.5vw] text-[3.4vw] font-medium"
+              v-if="$player.boolea"
+            >
+              列表循环
+            </h1>
+            <h1 class="ml-[1.5vw] text-[3.4vw] font-medium" v-else>单曲循环</h1>
           </div>
           <div class="flex w-[30vw] justify-between">
             <!-- 下载图标 -->
@@ -204,6 +247,12 @@
                 item.id == $player._currentTrack.id ? 'text-[#D15B57]' : ''
               "
             >
+              <span
+                v-if="item.fee == 1"
+                data-v-034931a5=""
+                class="w-[10vw] rounded-[5px] border-[1px] border-[red] font-[600] text-[2vw] text-[red] text-center leading-[6vw] scale-50 ml-[0] mr-[1vw]"
+                >vip</span
+              >
               {{ item.name }}
               <span
                 :class="
@@ -216,7 +265,7 @@
           </div>
           <div class="flex items-center">
             <p
-              class="text-[3vw] mr-[6vw] text-[#BCBCBC]"
+              class="text-[3vw] mr-[4vw] text-[#BCBCBC]"
               v-if="item.id == $player._currentTrack.id"
             >
               播放来源
@@ -243,6 +292,7 @@
 import VueSlider from 'vue-slider-component';
 import store from 'storejs';
 import 'vue-slider-component/theme/default.css';
+
 export default {
   components: {
     VueSlider,
@@ -253,6 +303,8 @@ export default {
       value: 0,
       show: false,
       music: [],
+      lyricTxt: '',
+      lyricsSwitching: true,
     };
   },
   methods: {
@@ -276,7 +328,7 @@ export default {
       store.set('cookie_music', this.music);
     },
     nextTrackCallback() {
-      this.$refs.zhen.style = 'transform:rotate(-45deg)';
+      if (this.$refs.zhen) this.$refs.zhen.style = 'transform:rotate(-45deg)';
       setTimeout(() => {
         this.$player.playOrPause();
         this.$player._nextTrackCallback();
@@ -284,7 +336,7 @@ export default {
     },
     // 上一首
     PrevTrackCallback() {
-      this.$refs.zhen.style = 'transform:rotate(-45deg)';
+      if (this.$refs.zhen) this.$refs.zhen.style = 'transform:rotate(-45deg)';
       setTimeout(() => {
         this.$player.playOrPause();
         if (this.$player.list.indexOf(this.$player._currentTrack.id) == 0) {
@@ -320,8 +372,10 @@ export default {
       return formattedTime;
     },
   },
-  created() {
+  async created() {
     this.music = store.get('cookie_music');
+    // console.log(this.$player);
+    // 歌词处理
   },
 };
 </script>
@@ -359,5 +413,16 @@ export default {
 
 .vue-slider-process {
   background: rgba(255, 255, 255, 0.5);
+}
+.internalShadow {
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    hsla(0, 0%, 100%, 0) 0,
+    hsla(0, 0%, 100%, 0.6) 15%,
+    #fff 25%,
+    #fff 75%,
+    hsla(0, 0%, 100%, 0.6) 85%,
+    hsla(0, 0%, 100%, 0)
+  );
 }
 </style>

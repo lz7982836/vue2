@@ -606,15 +606,15 @@ export default {
     this.calendar = res7.data.data.calendarEvents.slice(0, 2);
   },
   watch: {
-    async userSearchkeywords(keywords) {
+    // 异步函数，用于用户搜索关键词
+    async userSearchKeywords(keywords) {
+      // 调用 fetchSearchSuggest 函数获取搜索建议
       const res = await fetchSearchSuggest(keywords);
       console.log(res);
+      // 将搜索结果赋值给搜索建议列表
+      // 这里假设搜索结果为 res.result.songs
       this.searchSuggest = res.result.songs;
     },
-    // userSearchKeywords:_.debounce(async function (keywords) {
-    //   const res = await fetchSearchSuggest(keywords);
-    //   this.searchSuggest = res.result.songs;
-    // },300)
   },
 };
 </script>

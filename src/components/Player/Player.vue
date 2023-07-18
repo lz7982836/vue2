@@ -24,7 +24,7 @@
               {{ $player._currentTrack?.name }}
               <span class="text-[#80838f]">
                 -
-                {{ $player._currentTrack.ar ? suoy[0]?.ar[0]?.name : '' }}
+                {{ $player._currentTrack.ar[0]?.name }}
               </span>
             </p>
           </div>
@@ -65,17 +65,25 @@
     >
       <div class="playmusic py-[6vw]">
         <h1 class="text-[4vw] font-extrabold">
-          当前播放 <span class="text-[2vw] text-[#929293]">(26)</span>
+          当前播放
+          <span class="text-[2vw] text-[#929293]">({{ music.length }})</span>
         </h1>
         <div class="flex justify-between mt-[6.6vw] items-center">
           <div class="flex">
             <!-- 列表循环图标 -->
             <Icon
-              icon="arcticons:loopboard"
-              :horizontalFlip="true"
-              class="text-[5vw] text-[#B1B1B1]"
+              @click.native="$player.boolea = !$player.boolea"
+              :icon="$player.boolea ? 'fad:repeat' : 'fad:repeat-one'"
+              class="text-[#ccc] text-[8vw]"
             />
-            <h1 class="ml-[1.5vw] text-[3.4vw] font-medium">列表循环</h1>
+
+            <h1
+              class="ml-[1.5vw] text-[3.4vw] font-medium"
+              v-if="$player.boolea"
+            >
+              列表循环
+            </h1>
+            <h1 class="ml-[1.5vw] text-[3.4vw] font-medium" v-else>单曲循环</h1>
           </div>
           <div class="flex w-[30vw] justify-between">
             <!-- 下载图标 -->
@@ -120,6 +128,12 @@
                 item.id == $player._currentTrack.id ? 'text-[#D15B57]' : ''
               "
             >
+              <span
+                v-if="item.fee == 1"
+                data-v-034931a5=""
+                class="w-[10vw] rounded-[5px] border-[1px] border-[red] font-[600] text-[2vw] text-[red] text-center leading-[6vw] scale-50 ml-[0] mr-[1vw]"
+                >vip</span
+              >
               {{ item.name }}
               <span
                 :class="
@@ -132,7 +146,7 @@
           </div>
           <div class="flex items-center">
             <p
-              class="text-[3vw] mr-[6vw] text-[#BCBCBC]"
+              class="text-[3vw] mr-[4vw] text-[#BCBCBC]"
               v-if="item.id == $player._currentTrack.id"
             >
               播放来源
@@ -209,8 +223,6 @@ export default {
   },
   async created() {
     this.music = store.get('cookie_music');
-    // this.playerAll();
-    // this.init_music();
   },
 };
 </script>

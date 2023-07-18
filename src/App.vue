@@ -2,8 +2,6 @@
   <div
     :class="{
       dark: darkMode(),
-      'pb-[0]': $player.list == undefined,
-      'pb-[24vw]': $player.list != undefined,
     }"
     class=""
   >
@@ -31,7 +29,7 @@
         </template>
       </van-tabbar-item>
       <!-- 排行榜 -->
-      <van-tabbar-item replace to="MVView"
+      <van-tabbar-item replace to="/MVView"
         >排行榜
         <template #icon>
           <Icon icon="ion:podium-sharp" />
@@ -71,12 +69,11 @@ export default {
     showPlayer() {
       if (
         this.$route.path === '/InformationView' ||
-        this.$route.path === '/PlayerHome'
+        this.$route.path === '/PlayerHome' ||
+        this.$route.path.slice(0, 12) === '/MvVideoView'
       ) {
-        console.log(777);
         return false;
       }
-      // console.log(888);
       return true;
     },
     showHome() {

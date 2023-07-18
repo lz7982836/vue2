@@ -19,6 +19,9 @@ import {
   Tabbar,
   Tabs,
   Tab,
+  Collapse,
+  CollapseItem,
+  NoticeBar,
 } from 'vant';
 import formateTime from './utills/formateTime';
 
@@ -36,6 +39,9 @@ Vue.use(Drawer)
   .use(Pagination)
   .use(Tabs)
   .use(Tab)
+  .use(NoticeBar)
+  .use(Collapse)
+  .use(CollapseItem)
   .use(Circle)
   .use(Area)
   .use(Cell)

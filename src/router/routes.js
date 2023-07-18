@@ -81,4 +81,8 @@ export default [
     // 懒加载组件
     component: () => import('../views/MVView/MVView.jsx'),
   },
+  {
+    path: '/MvVideoView/:id',
+    component: () => import('../views/MVView/components/MvVideoView.vue'),
+  },
 ];

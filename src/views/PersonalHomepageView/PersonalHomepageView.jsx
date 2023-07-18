@@ -71,7 +71,7 @@ export default {
             {/* 关注 粉丝 */}
             <div class="mt-[3vw] text-[3vw] text-[rgb(148,152,162)] flex justify-center">
               <p>
-                {this.detailcookie.newFollows}{' '}
+                {this.detailcookie?.newFollows}{' '}
                 <span class="ml-[0.5vw]">关注</span>
               </p>
               <p class="ml-[4vw]">

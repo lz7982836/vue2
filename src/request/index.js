@@ -202,6 +202,34 @@ export const fetchUserUpdata4 = (province, city) =>
 export const featNicknameCheck = (nickname) =>
   http.get('/nickname/check', { params: { nickname } });
 
+//获取歌词
+export const lyricText = (id) => http.get('/lyric', { params: { id } });
+
 //Mv
-export const Mv = (area) =>
+export const featTopMv = (area) =>
   http.get('/top/mv', { params: { limit: 50, area } });
+/**
+ * @description MV视频
+ */
+export const featMvUrl = (id) => http.get('/mv/url', { params: { id } });
+
+/**
+ * @description MV视频信息
+ */
+export const featMvDetail = (mvid) =>
+  http.get('/mv/detail', { params: { mvid } });
+
+/**
+ * @description 获取 mv 点赞转发评论数数据
+ */
+export const featMvDetailInfo = (mvid) =>
+  http.get('/mv/detail/info', { params: { mvid } });
+
+// 评论
+export const featMvComment = (id) =>
+  http.get('/comment/mv', { params: { id, limit: 25 } });
+// 楼层评论
+export const featMvCommentFloor = (parentCommentId, id) =>
+  http.get('/comment/floor', {
+    params: { parentCommentId, id, limit: 50, type: 1 },
+  });
